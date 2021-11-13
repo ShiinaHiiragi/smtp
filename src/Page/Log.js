@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import MailOutlinedIcon from '@material-ui/icons/MailOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -52,40 +52,54 @@ const useStyles = makeStyles((theme) => ({
 export default function Log() {
   const classes = useStyles();
 
+  const [email, setEmail] = React.useState("");
+  const [auth, setAuth] = React.useState("");
+  const [tick, setTick] = React.useState(false);
+
+  React.useEffect(() => {
+    const storageEmail = window.localStorage.getItem("email");
+    setTick(storageEmail !== null);
+    if (storageEmail !== null) {
+      setEmail(storageEmail);
+    }
+  }, []);
+
+  const tickRemember = (event) => {
+    setTick((tick) => !tick);
+  }
+
   return (
     <Container component="main" maxWidth="xs" className={classes.root}>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <MailOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Log in to SMTP Sender
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
-            id="email"
             label="Email Address"
-            name="email"
-            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             autoFocus
           />
           <TextField
             variant="outlined"
             margin="normal"
-            required
             fullWidth
-            name="password"
-            label="Password"
+            label="Auth Code"
             type="password"
-            id="password"
-            autoComplete="current-password"
+            value={auth}
+            onChange={(event) => setAuth(event.target.value)}
           />
           <FormControlLabel
+            checked={tick}
+            onChange={tickRemember}
             control={<Checkbox value="remember" color="primary" />}
             label="Remember my E-mail"
           />
