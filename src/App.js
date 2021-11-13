@@ -1,8 +1,8 @@
+import Log from "./Page/Log";
+
 function App() {
   return (
-    <div>
-      HERE
-    </div>
+    <Log />
   );
 }
 
