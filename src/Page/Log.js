@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Auth from '../Component/Auth';
+import MessageBox from "../Component/MessageBox";
 import { globalConfig, Sender } from '../Component/Sender';
 import { localName } from '../Component/Constant';
 
@@ -67,16 +68,36 @@ export default function Log() {
     }
   }, []);
 
+  // the setting of snackbar
+  const [messageBoxInfo, setMessageBoxInfo] = React.useState({
+    open: false,
+    type: "success",
+    message: ""
+  });
+  const toggleMessageBox = React.useCallback((message, type) => {
+    setMessageBoxInfo({
+      open: true,
+      type: type,
+      message: message
+    });
+  }, []);
+  const closeMessageBox = React.useCallback(() => {
+    setMessageBoxInfo((snackbarInfo) => ({
+      ...snackbarInfo,
+      open: false
+    }));
+  }, []);
+
   const verify = React.useCallback(() => {
     if (!email.length || !auth.length) {
       setEmailError(!email.length);
       setAuthError(!auth.length);
       return;
     }
-    const sender = new Sender(new Object(), { ...globalConfig, email: email, auth: auth });
+    const sender = new Sender({ }, { ...globalConfig, email: email, auth: auth });
     sender.connect(true, (err) => {
       if (err) {
-
+        toggleMessageBox(`Auth Error: ${err}`, "error");
       } else {
         console.log("PANEL");
         // ReactDOM.render(<Log />, document.getElementById("root"));
@@ -85,7 +106,7 @@ export default function Log() {
         }
       }
     });
-  }, [email, auth, tick]);
+  }, [email, auth, tick, toggleMessageBox]);
 
   return (
     <Container component="main" maxWidth="xs" className={classes.root}>
@@ -152,6 +173,12 @@ export default function Log() {
       <Auth
         open={authDialogue}
         handleClose={() => setAuthDialogue(false)}
+      />
+      <MessageBox
+        open={messageBoxInfo.open}
+        handleClose={closeMessageBox}
+        messageBoxType={messageBoxInfo.type}
+        messageBoxMessage={messageBoxInfo.message}
       />
     </Container>
   );

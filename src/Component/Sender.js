@@ -10,7 +10,7 @@ const globalConfig = {
  * Class for sending emails on created
  * 
  * @param {object} info 
- * @param {object} info
+ * @param {object} config
  */
 export default function Sender(info, config) {
   this.info = info;
@@ -51,9 +51,12 @@ export default function Sender(info, config) {
           console.log(`GET CODES: ${codes}`);
           console.log(`GET RESPONSE: ${data.toString()}`);
           if (normal && next) {
-            next(this, codes);
+            next(this);
           } else {
             callback?.(normal ? undefined : data.toString());
+            if (!next) {
+              this.__proto__.Action[this.__proto__.Step.quit](this)
+            }
           }
         });
       }
