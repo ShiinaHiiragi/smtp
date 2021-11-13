@@ -37,6 +37,7 @@ export default function Sender(info, config) {
   this.info.name = os.hostname();
 
   this.connect = function(check = false, callback) {
+    this.quit = false;
     this.checkConnect = check;
     this.client = tls.connect(
       this.info.port,
@@ -52,10 +53,11 @@ export default function Sender(info, config) {
           console.log(`GET RESPONSE: ${data.toString()}`);
           if (normal && next) {
             next(this);
-          } else {
+          } else if (!this.quit) {
             callback?.(normal ? undefined : data.toString());
-            if (!next) {
-              this.__proto__.Action[this.__proto__.Step.quit](this)
+            if (next) {
+              this.quit = true;
+              this.__proto__.Action[this.__proto__.Step.quit](this);
             }
           }
         });
