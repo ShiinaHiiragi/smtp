@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 
+// var os = window.require('os')
+// console.log(os.cpus())
+
 function App() {
   return (
     <div className="App">
