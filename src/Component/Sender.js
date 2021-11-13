@@ -4,16 +4,13 @@ const tls = window.require("tls");
 const globalConfig = {
   host: "smtp.qq.com",
   port: 465
-  // email: "2191558076@qq.com",
-  // auth: "fqxktlgdgbaddjcd"
 };
-
-export { globalConfig }
 
 /**
  * Class for sending emails on created
  * 
  * @param {object} info 
+ * @param {object} info
  */
 export default function Sender(info, config) {
   this.info = info;
@@ -67,6 +64,8 @@ export default function Sender(info, config) {
    * Write lines to the sockets
    * 
    * @param {String} lines
+   * @param {Boolean} next
+   * @param {Number} num
    */
   this.write = function(lines, next = true, num = 1) {
     if (next) {
@@ -134,21 +133,27 @@ Sender.prototype.Action = {
   }
 };
 
-const sender = new Sender({
-  to: [
-    "shiinahiiragi@163.com",
-    "shiinahiiragi@outlook.com",
-  ],
-  message: {
-    subject: "TLS TEST",
-    content: "Test for tls.\r\n.\r\nA single dot here.\r\n"
-  }
-});
+export { globalConfig, Sender }
 
-sender.connect(true, (err) => {
-  if (err) {
-    console.log("ERR!");
-  } else {
-    console.log("SUCCESS!");
-  }
-});
+// const sender = new Sender({
+//   to: [
+//     "shiinahiiragi@163.com",
+//     "shiinahiiragi@outlook.com",
+//   ],
+//   message: {
+//     subject: "TLS TEST",
+//     content: "Test for tls.\r\n.\r\nA single dot here.\r\n"
+//   }
+// }, {
+//   ...globalConfig,
+//   email: "2191558076@qq.com",
+//   auth: "fqxktlgdgbaddjcd"
+// });
+
+// sender.connect(true, (err) => {
+//   if (err) {
+//     console.log("ERR!");
+//   } else {
+//     console.log("SUCCESS!");
+//   }
+// });

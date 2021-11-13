@@ -12,14 +12,14 @@ import MailOutlinedIcon from '@material-ui/icons/MailOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Auth from '../Component/Auth';
+import { globalConfig, Sender } from '../Component/Sender';
+import { localName } from '../Component/Constant';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://ichinoe.xyz" target="_blank">
-        Ichinoe
-      </Link>{' '}
+      {'Copyright © Ichinoe '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -54,19 +54,38 @@ export default function Log() {
 
   const [email, setEmail] = React.useState("");
   const [auth, setAuth] = React.useState("");
+  const [emailError, setEmailError] = React.useState(false);
+  const [authError, setAuthError] = React.useState(false);
   const [tick, setTick] = React.useState(false);
+  const [authDialogue, setAuthDialogue] = React.useState(false);
 
   React.useEffect(() => {
-    const storageEmail = window.localStorage.getItem("email");
+    const storageEmail = window.localStorage.getItem(localName.email);
     setTick(storageEmail !== null);
     if (storageEmail !== null) {
       setEmail(storageEmail);
     }
   }, []);
 
-  const tickRemember = (event) => {
-    setTick((tick) => !tick);
-  }
+  const verify = React.useCallback(() => {
+    if (!email.length || !auth.length) {
+      setEmailError(!email.length);
+      setAuthError(!auth.length);
+      return;
+    }
+    const sender = new Sender(new Object(), { ...globalConfig, email: email, auth: auth });
+    sender.connect(true, (err) => {
+      if (err) {
+
+      } else {
+        console.log("PANEL");
+        // ReactDOM.render(<Log />, document.getElementById("root"));
+        if (tick) {
+          window.localStorage.setItem(localName.email, email);
+        }
+      }
+    });
+  }, [email, auth, tick]);
 
   return (
     <Container component="main" maxWidth="xs" className={classes.root}>
@@ -85,6 +104,7 @@ export default function Log() {
             fullWidth
             label="Email Address"
             value={email}
+            error={emailError}
             onChange={(event) => setEmail(event.target.value)}
             autoFocus
           />
@@ -95,26 +115,31 @@ export default function Log() {
             label="Auth Code"
             type="password"
             value={auth}
+            error={authError}
             onChange={(event) => setAuth(event.target.value)}
           />
           <FormControlLabel
             checked={tick}
-            onChange={tickRemember}
+            onChange={(event) => setTick((tick) => !tick)}
             control={<Checkbox value="remember" color="primary" />}
             label="Remember my E-mail"
           />
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={verify}
           >
             Log IN
           </Button>
           <Grid container>
             <Grid item>
-              <Link variant="body2" style={{cursor: "pointer"}}>
+              <Link
+                variant="body2"
+                style={{cursor: "pointer"}}
+                onClick={() => setAuthDialogue(true)}
+              >
                 What is Auth Code?
               </Link>
             </Grid>
@@ -124,6 +149,10 @@ export default function Log() {
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Auth
+        open={authDialogue}
+        handleClose={() => setAuthDialogue(false)}
+      />
     </Container>
   );
 }
