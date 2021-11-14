@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,6 +17,7 @@ import Auth from '../Component/Auth';
 import MessageBox from "../Component/MessageBox";
 import { globalConfig, Sender } from '../Component/Sender';
 import { localName } from '../Component/Constant';
+import Panel from './Panel';
 
 function Copyright() {
   return (
@@ -99,8 +101,7 @@ export default function Log() {
       if (err) {
         toggleMessageBox(`Auth Error: ${err}`, "error");
       } else {
-        console.log("PANEL");
-        // ReactDOM.render(<Log />, document.getElementById("root"));
+        ReactDOM.render(<Panel email={email} auth={auth}/>, document.getElementById("root"));
         if (tick) {
           window.localStorage.setItem(localName.email, email);
         }
