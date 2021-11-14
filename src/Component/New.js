@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
+import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import Sign from './Sign';
 import { localName } from './Constant';
 
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function New(props) {
   const classes = useStyles();
-  const { config, toggleMessageBox, mail, setMail } = props;
+  const { config, mail, setMail } = props;
   const { toList, text } = mail;
   const { setToList, setText } = setMail;
   
@@ -100,6 +101,16 @@ export default function New(props) {
           New Addressee
         </Button>
         <div style={{ flexGrow: 1 }}/>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          style={{ marginRight: 8 }}
+          startIcon={<SaveOutlinedIcon />}
+          // onClick={toggleNewContact}
+        >
+          Save Draft
+        </Button>
         <Button
           variant="outlined"
           color="primary"

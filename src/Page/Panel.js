@@ -93,6 +93,14 @@ export default function Panel(props) {
   const [config, setConfig] = React.useState({ });
   const [router, setRouter] = React.useState(sideList.smtp.index);
 
+  /**
+   * The meaning of buffer state:
+   * 0 - Unsave, and no e-mail accordance
+   * N - N > 0. Saved, and correspond to no.N e-mail
+   * N - N < 0. Unsave, and correspond to no.-N e-mail
+   */
+  const [buffer, setBuffer] = React.useState(0);
+
   const [address, setAddress] = React.useState([]);
 
   const [toList, setToList] = React.useState([]);
@@ -187,6 +195,7 @@ export default function Panel(props) {
             </ListItemIcon>
             <ListItemText
               primary={sideList.new.name}
+              secondary={`${buffer > 0 ? 'Saved' : 'No Save'}`}
             />
           </ListItem>
           <ListItem
@@ -228,7 +237,6 @@ export default function Panel(props) {
             config={config}
             mail={{ toList, text }}
             setMail={{ setToList, setText }}
-            toggleMessageBox={toggleMessageBox}
           /> : router === sideList.send.index
           ? <Send />
           : router === sideList.draft.index

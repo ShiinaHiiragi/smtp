@@ -13,27 +13,23 @@ const globalConfig = {
  * @param {object} config
  */
 export default function Sender(info, config) {
-  this.info = info;
-
   /**
    * interface info {
    *   current: Number = 0,
    *   counter: Number = 0,
-   *   port: Number = 587,
-   *   host: String = "smtp.qq.com",
    *   name: String = "DESKTOP-45M6KN1",
-   *   auth: String = "fqxktlgdgbaddjcd",
+   *   host: String = "smtp.qq.com",
+   *   port: Number = 587,
+   *   sign: String = "Ichinoe"
    *   from: String = "2191558076@qq.com",
-   *   to: String[] = ["shiinahiiragi@163.com"],
+   *   auth: String = "fqxktlgdgbaddjcd",
+   *   to: Object[] = [{ name: "Mizue", email: "shiinahiiragi@163.com" }],
    *   message: String
    * }
    */
+  this.info = { ...info, ...config };
   this.info.current = 0;
   this.info.counter = 0;
-  this.info.host = config.host;
-  this.info.port = config.port;
-  this.info.auth = config.auth;
-  this.info.from = config.email;
   this.info.name = os.hostname();
 
   this.connect = function(check = false, callback) {
@@ -127,8 +123,10 @@ Sender.prototype.Action = {
   [Sender.prototype.Step.content]: (sender) => {
     sender.info.message.content.replace(/\r\n/g, "\n");
     sender.write([
-      `From: <${sender.info.from}>`,
-      ...(sender.info.to.map((item) => `To: <${item}>`)),
+      `From: "${sender.info.sign}" <${sender.info.from}>`,
+      ...(sender.info.to.map((item) => 
+        `To: ${item.name.length ? `"${item.name}" ` : ` `}<${item.email}>`
+      )),
       `Subject: ${sender.info.message.subject}`,
       `\r\n${sender.info.message.content}\r\n.`
     ].join("\r\n"));
@@ -142,8 +140,14 @@ export { globalConfig, Sender }
 
 // const sender = new Sender({
 //   to: [
-//     "shiinahiiragi@163.com",
-//     "shiinahiiragi@outlook.com",
+//     {
+//       name: "me",
+//       email: "shiinahiiragi@163.com"
+//     },
+//     {
+//       name: "stillMe",
+//       email: "shiinahiiragi@outlook.com",
+//     }
 //   ],
 //   message: {
 //     subject: "TLS TEST",
@@ -151,7 +155,8 @@ export { globalConfig, Sender }
 //   }
 // }, {
 //   ...globalConfig,
-//   email: "2191558076@qq.com",
+//   sign: "Ichinoe",
+//   from: "2191558076@qq.com",
 //   auth: "fqxktlgdgbaddjcd"
 // });
 
