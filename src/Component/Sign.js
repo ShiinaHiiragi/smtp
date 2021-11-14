@@ -1,3 +1,4 @@
+import React from 'react';
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -5,6 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { localName } from "./Constant";
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 const useStyles = makeStyles((theme) => ({
@@ -17,11 +19,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NewContact(props) {
+export default function Sign(props) {
   const classes = useStyles();
-  const { open, form, setForm, handleClose, handleApply } = props;
-  const { name, email, nameError, emailError } = form;
-  const { setName, setEmail } = setForm;
+  const { open, name, setName, config, handleClose } = props;
+
+  const apply = React.useCallback(() => {
+    let result = name;
+    const pair = `${config.email}_${localName.sign}`;
+    if (!result.length) {
+      result = config.email;
+    }
+    setName(result);
+    window.localStorage.setItem(pair, result);
+    handleClose();
+  }, [config.email, handleClose, name, setName]);
 
   return (
     <Dialog
@@ -30,30 +41,22 @@ export default function NewContact(props) {
       onClose={handleClose}
       className={classes.noneSelect}
     >
-      <DialogTitle> Add New Liaison </DialogTitle>
+      <DialogTitle> Change Signature </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Enter the remarks name and its e-mail, and then click 'APPLY' to continue.
+          The signature assigned will appear as your name before your E-Mail address.
         </DialogContentText>
         <div className={classes.text}>
           <TextField
             label={'Name'}
             style={{ width: '60%' }}
             value={name}
-            error={nameError}
             onChange={(event) => setName(event.target.value)}
-          />
-          <TextField
-            label={'E-Mail'}
-            style={{ width: '60%' }}
-            value={email}
-            error={emailError}
-            onChange={(event) => setEmail(event.target.value)}
           />
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleApply} color="secondary">
+        <Button onClick={apply} color="secondary">
           APPLY
         </Button>
         <Button onClick={handleClose} color="primary">

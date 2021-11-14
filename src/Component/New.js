@@ -1,10 +1,14 @@
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
+import Sign from './Sign';
+import { localName } from './Constant';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +40,13 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     height: "78%",
-    overflowY: "scroll"
+    overflowY: "scroll",
+    '& ::before': {
+      content: "none"
+    },
+    '& ::after': {
+      content: "none"
+    }
   },
   nil: {
     width: "100%",
@@ -47,8 +57,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function New() {
+export default function New(props) {
   const classes = useStyles();
+  const { config, toggleMessageBox, mail, setMail } = props;
+  const { toList, text } = mail;
+  const { setToList, setText } = setMail;
+  
+  const [editSign, setEditSign] = React.useState(false);
+  const [sign, setSign] = React.useState("");
+
+  React.useEffect(() => {
+    let pair = `${config.email}_${localName.sign}`;
+    let storage = window.localStorage.getItem(pair);
+    if (storage === null) {
+      window.localStorage.setItem(pair, config.email);
+      storage = config.email;
+    }
+    setSign(storage);
+  // eslint-disable-next-line
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -59,7 +86,7 @@ export default function New() {
           className={classes.button}
           style={{ marginRight: 8 }}
           startIcon={<CreateOutlinedIcon />}
-          // onClick={toggleNewContact}
+          onClick={() => setEditSign(true)}
         >
           Signature
         </Button>
@@ -78,6 +105,7 @@ export default function New() {
           color="primary"
           className={classes.button}
           startIcon={<SendOutlinedIcon />}
+          disabled={!toList.length}
           // onClick={toggleNewContact}
         >
           Send E-Mail
@@ -94,8 +122,21 @@ export default function New() {
         <Divider />
         <div style={{ height: "2%" }}/>
         <div className={classes.text}>
-          临兵斗者皆阵列在前
+          <TextField
+            fullWidth
+            multiline
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            label="Text Here"
+          />
         </div>
+        <Sign
+          open={editSign}
+          name={sign}
+          setName={setSign}
+          config={config}
+          handleClose={() => setEditSign(false)}
+        />
       </Card>
     </div>
   );
