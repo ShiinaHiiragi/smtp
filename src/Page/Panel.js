@@ -98,6 +98,7 @@ export default function Panel(props) {
   React.useEffect(() => {
     setConfig({ email: props.email, auth: props.email });
     setAddress(loadObject(props.email, localName.address));
+  // eslint-disable-next-line
   }, []);
 
   return (
@@ -133,7 +134,7 @@ export default function Panel(props) {
       >
         <ListItem style={{ paddingLeft: 16 }}>
           <ListItemAvatar>
-            <img src={favicon} width={32} height={32} />
+            <img src={favicon} alt="" width={32} height={32} />
           </ListItemAvatar>
           <ListItemText primary="SMTP Sender" secondary="Version 0.1.0" />
         </ListItem>
@@ -193,7 +194,7 @@ export default function Panel(props) {
       <main className={clsx(classes.content, { [classes.contentShift]: drawer })}>
         <div className={classes.drawerHeader} />
         {router === sideList.address.index
-          ? <Address />
+          ? <Address address={address}/>
           : router === sideList.new.index
           ? <New />
           : router === sideList.send.index

@@ -26,6 +26,24 @@ const sideList = {
   }
 }
 
+const contacts = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: "160"
+  },
+  {
+    field: "name",
+    headerName: "Name",
+    width: "200"
+  },
+  {
+    field: "email",
+    headerName: "E-Mail",
+    width: "300"
+  },
+];
+
 const loadObject = (email, key) => {
   const pair = `${email}_${key}`;
   const storage = window.localStorage.getItem(pair);
@@ -38,4 +56,4 @@ const loadObject = (email, key) => {
 }
 
 export default localName;
-export { localName, sideList, loadObject }
+export { localName, sideList, contacts, loadObject }

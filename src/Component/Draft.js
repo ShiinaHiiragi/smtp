@@ -5,7 +5,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 0,
     flexGrow: 1,
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    padding: theme.spacing(2, 3)
   }
 }));
 
