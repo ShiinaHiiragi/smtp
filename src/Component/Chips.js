@@ -1,5 +1,6 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
+import AddIcon from '@material-ui/icons/Add';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +39,13 @@ export default function ChipsArray(props) {
           </li>
         );
       })}
+      <Chip
+        clickable
+        icon={<AddIcon />}
+        className={classes.chip}
+        variant="outlined"
+        label={"Add Addressee"}
+      />
     </div>
   );
 }

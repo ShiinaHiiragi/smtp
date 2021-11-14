@@ -2,9 +2,7 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
@@ -49,13 +47,6 @@ const useStyles = makeStyles((theme) => ({
     '& ::after': {
       content: "none"
     }
-  },
-  nil: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
   }
 }));
 
@@ -92,15 +83,6 @@ export default function New(props) {
         >
           Signature
         </Button>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          startIcon={<PersonAddOutlinedIcon />}
-          // onClick={}
-        >
-          New Addressee
-        </Button>
         <div style={{ flexGrow: 1 }}/>
         <Button
           variant="outlined"
@@ -125,14 +107,10 @@ export default function New(props) {
       </div>
       <Card className={classes.card}>
         <div className={classes.chip}>
-          {toList.length
-            ? <ChipsArray
-              toList={toList}
-              setToList={setToList}
-            /> : <div
-              className={classes.nil}
-              children={<Typography children="NO ADDRESSEE NOW" variant="button"/>}
-            />}
+          <ChipsArray
+            toList={toList}
+            setToList={setToList}
+          />
         </div>
         <div style={{ height: "2%" }}/>
         <Divider />
