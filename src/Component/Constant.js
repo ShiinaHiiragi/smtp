@@ -1,5 +1,6 @@
 const localName = {
-  email: "email"
+  email: "email",
+  address: "address"
 }
 
 const sideList = {
@@ -25,5 +26,16 @@ const sideList = {
   }
 }
 
+const loadObject = (email, key) => {
+  const pair = `${email}_${key}`;
+  const storage = window.localStorage.getItem(pair);
+  if (storage === null) {
+    window.localStorage.setItem(pair, JSON.stringify([]));
+    return [];
+  } else {
+    return JSON.parse(storage);
+  }
+}
+
 export default localName;
-export { localName, sideList }
+export { localName, sideList, loadObject }

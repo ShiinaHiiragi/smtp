@@ -20,13 +20,13 @@ import CheckIcon from '@material-ui/icons/Check';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import favicon from './favicon.png';
-import { sideList } from '../Component/Constant';
+import { localName, sideList, loadObject } from '../Component/Constant';
 import Address from '../Component/Address';
 import New from '../Component/New';
 import Send from '../Component/Send';
 import Draft from '../Component/Draft';
 
-const drawerWidth = 280;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,8 +89,12 @@ export default function Panel(props) {
   const [config, setConfig] = React.useState({ });
   const [router, setRouter] = React.useState(sideList.smtp.index);
 
+  const [address, setAddress] = React.useState([]);
+
+  // initilize from local storage
   React.useEffect(() => {
     setConfig({ email: props.email, auth: props.email });
+    setAddress(loadObject(props.email, localName.address));
   }, []);
 
   return (
@@ -113,7 +117,7 @@ export default function Panel(props) {
             {drawer ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
           <Typography variant="h6" noWrap>
-            Persistent drawer
+            {sideList[Object.keys(sideList).find((item) => sideList[item].index === router)].name}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -124,7 +128,7 @@ export default function Panel(props) {
         open={drawer}
         classes={{ paper: classes.drawerPaper }}
       >
-        <ListItem>
+        <ListItem style={{ paddingLeft: 16 }}>
           <ListItemAvatar>
             <img src={favicon} width={32} height={32} />
           </ListItemAvatar>
@@ -137,11 +141,12 @@ export default function Panel(props) {
             selected={router === sideList.address.index}
             onClick={() => setRouter(sideList.address.index)}
           >
-            <ListItemIcon>
+            <ListItemIcon style={{ paddingLeft: 4 }}>
               <PersonOutlineIcon />
             </ListItemIcon>
             <ListItemText
               primary={sideList.address.name}
+              secondary={`${address.length} Liaison${address.length > 1 ? 's' : ''}`}
             />
           </ListItem>
           <ListItem
@@ -149,7 +154,7 @@ export default function Panel(props) {
             selected={router === sideList.new.index}
             onClick={() => setRouter(sideList.new.index)}
           >
-            <ListItemIcon>
+            <ListItemIcon style={{ paddingLeft: 4 }}>
               <MailOutlineIcon />
             </ListItemIcon>
             <ListItemText
@@ -161,7 +166,7 @@ export default function Panel(props) {
             selected={router === sideList.send.index}
             onClick={() => setRouter(sideList.send.index)}
           >
-            <ListItemIcon>
+            <ListItemIcon style={{ paddingLeft: 4 }}>
               <CheckIcon />
             </ListItemIcon>
             <ListItemText
@@ -173,7 +178,7 @@ export default function Panel(props) {
             selected={router === sideList.draft.index}
             onClick={() => setRouter(sideList.draft.index)}
           >
-            <ListItemIcon>
+            <ListItemIcon style={{ paddingLeft: 4 }}>
               <SaveAltIcon />
             </ListItemIcon>
             <ListItemText
