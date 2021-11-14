@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ChipsArray(props) {
   const classes = useStyles();
-  const { toList, setToList } = props;
+  const { toList, setToList, toggleEditContact } = props;
 
   const handleDelete = (chipToDelete) => () => {
     setToList((toList) => toList.filter((_, index) => index !== chipToDelete));
@@ -45,6 +45,7 @@ export default function ChipsArray(props) {
         className={classes.chip}
         variant="outlined"
         label={"Add Addressee"}
+        onClick={toggleEditContact}
       />
     </div>
   );

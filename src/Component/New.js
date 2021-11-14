@@ -8,6 +8,7 @@ import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import ChipsArray from './Chips';
 import Sign from './Sign';
+import Contact from './Contact';
 import { localName } from './Constant';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -38,8 +39,11 @@ const useStyles = makeStyles((theme) => ({
     height: "22%",
     overflowY: "scroll"
   },
+  subject: {
+    height: 14,
+  },
   text: {
-    height: "74%",
+    height: "calc(72% - 48px)",
     overflowY: "scroll",
     '& ::before': {
       content: "none"
@@ -53,10 +57,11 @@ const useStyles = makeStyles((theme) => ({
 export default function New(props) {
   const classes = useStyles();
   const { config, mail, setMail } = props;
-  const { toList, text } = mail;
-  const { setToList, setText } = setMail;
+  const { toList, subject, text } = mail;
+  const { setToList, setSubject, setText } = setMail;
   
   const [editSign, setEditSign] = React.useState(false);
+  const [editContact, setEditContact] = React.useState(false);
   const [sign, setSign] = React.useState("");
 
   React.useEffect(() => {
@@ -110,10 +115,18 @@ export default function New(props) {
           <ChipsArray
             toList={toList}
             setToList={setToList}
+            toggleEditContact={() => setEditContact(true)}
           />
         </div>
         <div style={{ height: "2%" }}/>
         <Divider />
+        <div style={{ height: "2%" }}/>
+        <TextField
+          fullWidth
+          value={subject}
+          onChange={(event) => setSubject(event.target.value)}
+          label="Subject"
+        />
         <div style={{ height: "2%" }}/>
         <div className={classes.text}>
           <TextField
@@ -121,7 +134,7 @@ export default function New(props) {
             multiline
             value={text}
             onChange={(event) => setText(event.target.value)}
-            label="Text Here"
+            label="Text"
           />
         </div>
         <Sign
@@ -130,6 +143,10 @@ export default function New(props) {
           setName={setSign}
           config={config}
           handleClose={() => setEditSign(false)}
+        />
+        <Contact
+          open={editContact}
+          handleClose={() => setEditContact(false)}
         />
       </Card>
     </div>

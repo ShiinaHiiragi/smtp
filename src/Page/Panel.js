@@ -103,6 +103,7 @@ export default function Panel(props) {
   const [address, setAddress] = React.useState([]);
 
   const [toList, setToList] = React.useState([]);
+  const [subject, setSubject] = React.useState("");
   const [text, setText] = React.useState("");
 
   // initilize from local storage
@@ -234,8 +235,8 @@ export default function Panel(props) {
           /> : router === sideList.new.index
           ? <New
             config={config}
-            mail={{ toList, text }}
-            setMail={{ setToList, setText }}
+            mail={{ toList, subject, text }}
+            setMail={{ setToList, setSubject, setText }}
           /> : router === sideList.send.index
           ? <Send />
           : router === sideList.draft.index
