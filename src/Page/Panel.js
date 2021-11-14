@@ -216,6 +216,7 @@ export default function Panel(props) {
         <div className={classes.drawerHeader} />
         {router === sideList.address.index
           ? <Address
+            config={config}
             toggleMessageBox={toggleMessageBox}
             address={address}
             setAddress={setAddress}

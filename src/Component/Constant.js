@@ -55,5 +55,10 @@ const loadObject = (email, key) => {
   }
 }
 
+const saveObject = (email, key, obj) => {
+  const pair = `${email}_${key}`;
+  window.localStorage.setItem(pair, JSON.stringify(obj));
+}
+
 export default localName;
-export { localName, sideList, contacts, loadObject }
+export { localName, sideList, contacts, loadObject, saveObject }

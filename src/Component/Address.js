@@ -5,8 +5,8 @@ import MailOutlined from '@material-ui/icons/MailOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import NewContact from './NewContact';
-import { contacts } from '../Component/Constant';
-import { DataGridPro } from '@mui/x-data-grid-pro';
+import { contacts, saveObject, localName } from '../Component/Constant';
+import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -35,9 +35,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Address(props) {
   const classes = useStyles();
-  const { toggleMessageBox, address, setAddress } = props;
+  const apiRef = useGridApiRef();
+  const { config, toggleMessageBox, address, setAddress } = props;
 
   const [newContact, setNewContact] = React.useState(false);
+  const [invalid, setInvalid] = React.useState(true);
+
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [nameError, setNameError] = React.useState(false);
@@ -51,19 +54,48 @@ export default function Address(props) {
     setNewContact(true);
   }, []);
 
-  const apply = () => {
+  const applyNew = () => {
     setNameError(!name.length);
     setEmailError(!email.length);
     if (!name.length || !email.length) {
-      toggleMessageBox(`Please enter the name and the e-mail.`, 'error');
+      toggleMessageBox(`Please enter the name and the E-Mail.`, 'error');
       return;
     }
-    setAddress((address) => [
-      ...address,
-      { id: address.length + 1, name: name, email: email }
-    ]);
+    if (!/^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+      setEmailError(true);
+      toggleMessageBox(`Unsupported E-Mail address.`, 'error');
+      return;
+    }
+
+    setAddress((address) => {
+      const newAddress = [
+        ...address,
+        { id: address.length + 1, name: name, email: email }
+      ];
+      saveObject(config.email, localName.address, newAddress);
+      return newAddress;
+    });
     setNewContact(false);
   }
+
+  React.useEffect(() => {
+    return apiRef.current.subscribeEvent("selectionChange", (params) => {
+      setInvalid(params.length === 0);
+    });
+  }, [apiRef]);
+
+  const deleteContact = () => {
+    setAddress((address) => {
+      let newAddress = [...address];
+      const forDelete = [...apiRef.current.getSelectedRows().keys()]
+        .sort((left, right) => right - left)
+        .map((item) => item - 1);
+      forDelete.forEach((item) => newAddress.splice(item, 1));
+      newAddress.forEach((item, index) => item.id = index + 1);
+      saveObject(config.email, localName.address, newAddress);
+      return newAddress;
+    });
+  };
 
   return (
     <div className={classes.root}>
@@ -73,6 +105,7 @@ export default function Address(props) {
           color="primary"
           className={classes.button}
           startIcon={<MailOutlined />}
+          disabled={invalid}
         >
           Send Email
         </Button>
@@ -83,6 +116,8 @@ export default function Address(props) {
           className={classes.button}
           style={{ marginRight: 8 }}
           startIcon={<CloseIcon />}
+          disabled={invalid}
+          onClick={deleteContact}
         >
           Delete
         </Button>
@@ -102,13 +137,14 @@ export default function Address(props) {
           style={{ borderRadius: 0 }}
           rows={address}
           columns={contacts}
+          apiRef={apiRef}
         />
       </Card>
       <NewContact
         open={newContact}
         form={{ name, email, nameError, emailError }}
         setForm={{ setName, setEmail }}
-        handleApply={apply}
+        handleApply={applyNew}
         handleClose={() => setNewContact(false)}
       />
     </div>
