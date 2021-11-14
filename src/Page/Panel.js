@@ -20,6 +20,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import favicon from './favicon.png';
+import MessageBox from "../Component/MessageBox";
 import { localName, sideList, loadObject } from '../Component/Constant';
 import Address from '../Component/Address';
 import New from '../Component/New';
@@ -99,6 +100,26 @@ export default function Panel(props) {
     setConfig({ email: props.email, auth: props.email });
     setAddress(loadObject(props.email, localName.address));
   // eslint-disable-next-line
+  }, []);
+
+  // the setting of snackbar
+  const [messageBoxInfo, setMessageBoxInfo] = React.useState({
+    open: false,
+    type: "success",
+    message: ""
+  });
+  const toggleMessageBox = React.useCallback((message, type) => {
+    setMessageBoxInfo({
+      open: true,
+      type: type,
+      message: message
+    });
+  }, []);
+  const closeMessageBox = React.useCallback(() => {
+    setMessageBoxInfo((snackbarInfo) => ({
+      ...snackbarInfo,
+      open: false
+    }));
   }, []);
 
   return (
@@ -194,8 +215,11 @@ export default function Panel(props) {
       <main className={clsx(classes.content, { [classes.contentShift]: drawer })}>
         <div className={classes.drawerHeader} />
         {router === sideList.address.index
-          ? <Address address={address}/>
-          : router === sideList.new.index
+          ? <Address
+            toggleMessageBox={toggleMessageBox}
+            address={address}
+            setAddress={setAddress}
+          /> : router === sideList.new.index
           ? <New />
           : router === sideList.send.index
           ? <Send />
@@ -203,6 +227,12 @@ export default function Panel(props) {
           ? <Draft />
           : null}
       </main>
+      <MessageBox
+        open={messageBoxInfo.open}
+        handleClose={closeMessageBox}
+        messageBoxType={messageBoxInfo.type}
+        messageBoxMessage={messageBoxInfo.message}
+      />
     </div>
   );
 }

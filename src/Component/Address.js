@@ -1,8 +1,10 @@
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import MailOutlined from '@material-ui/icons/MailOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
+import NewContact from './NewContact';
 import { contacts } from '../Component/Constant';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 
@@ -33,7 +35,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Address(props) {
   const classes = useStyles();
-  const { address } = props;
+  const { toggleMessageBox, address, setAddress } = props;
+
+  const [newContact, setNewContact] = React.useState(false);
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [nameError, setNameError] = React.useState(false);
+  const [emailError, setEmailError] = React.useState(false);
+
+  const toggleNewContact = React.useCallback(() => {
+    setName("");
+    setEmail("");
+    setNameError(false);
+    setEmailError(false);
+    setNewContact(true);
+  }, []);
+
+  const apply = () => {
+    setNameError(!name.length);
+    setEmailError(!email.length);
+    if (!name.length || !email.length) {
+      toggleMessageBox(`Please enter the name and the e-mail.`, 'error');
+      return;
+    }
+    setAddress((address) => [
+      ...address,
+      { id: address.length + 1, name: name, email: email }
+    ]);
+    setNewContact(false);
+  }
 
   return (
     <div className={classes.root}>
@@ -61,6 +91,7 @@ export default function Address(props) {
           color="primary"
           className={classes.button}
           startIcon={<AddIcon />}
+          onClick={toggleNewContact}
         >
           New
         </Button>
@@ -73,6 +104,13 @@ export default function Address(props) {
           columns={contacts}
         />
       </Card>
+      <NewContact
+        open={newContact}
+        form={{ name, email, nameError, emailError }}
+        setForm={{ setName, setEmail }}
+        handleApply={apply}
+        handleClose={() => setNewContact(false)}
+      />
     </div>
   );
 }

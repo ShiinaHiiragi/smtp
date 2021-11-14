@@ -91,15 +91,16 @@ export default function Log() {
   }, []);
 
   const verify = React.useCallback(() => {
+    setEmailError(!email.length);
+    setAuthError(!auth.length);
     if (!email.length || !auth.length) {
-      setEmailError(!email.length);
-      setAuthError(!auth.length);
+      toggleMessageBox(`Please enter the E-Mail and the Auth Code.`, 'error');
       return;
     }
     const sender = new Sender({ }, { ...globalConfig, email: email, auth: auth });
     sender.connect(true, (err) => {
       if (err) {
-        toggleMessageBox(`Auth Error: ${err}`, "error");
+        toggleMessageBox(`Auth Error: ${err}`, 'error');
       } else {
         ReactDOM.render(<Panel email={email} auth={auth}/>, document.getElementById("root"));
         if (tick) {
