@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -27,8 +26,8 @@ import New from '../Component/New';
 import Send from '../Component/Send';
 import Draft from '../Component/Draft';
 
+import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 300;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     userSelect: 'none',

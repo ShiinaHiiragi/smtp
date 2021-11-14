@@ -11,7 +11,6 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import MailOutlinedIcon from '@material-ui/icons/MailOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Auth from '../Component/Auth';
 import MessageBox from "../Component/MessageBox";
@@ -19,16 +18,7 @@ import { globalConfig, Sender } from '../Component/Sender';
 import { localName } from '../Component/Constant';
 import Panel from './Panel';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © Ichinoe '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
+import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   root: {
     userSelect: 'none'
@@ -51,6 +41,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © Ichinoe '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 export default function Log() {
   const classes = useStyles();

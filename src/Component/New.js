@@ -8,6 +8,7 @@ import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
+import ChipsArray from './Chips';
 import Sign from './Sign';
 import { localName } from './Constant';
 
@@ -36,11 +37,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 0
   },
   chip: {
-    height: "18%",
+    height: "22%",
     overflowY: "scroll"
   },
   text: {
-    height: "78%",
+    height: "74%",
     overflowY: "scroll",
     '& ::before': {
       content: "none"
@@ -96,7 +97,7 @@ export default function New(props) {
           color="primary"
           className={classes.button}
           startIcon={<PersonAddOutlinedIcon />}
-          // onClick={toggleNewContact}
+          // onClick={}
         >
           New Addressee
         </Button>
@@ -124,10 +125,14 @@ export default function New(props) {
       </div>
       <Card className={classes.card}>
         <div className={classes.chip}>
-          <div
-            className={classes.nil}
-            children={<Typography children="NO ADDRESSEE NOW" variant="button"/>}
-          />
+          {toList.length
+            ? <ChipsArray
+              toList={toList}
+              setToList={setToList}
+            /> : <div
+              className={classes.nil}
+              children={<Typography children="NO ADDRESSEE NOW" variant="button"/>}
+            />}
         </div>
         <div style={{ height: "2%" }}/>
         <Divider />
