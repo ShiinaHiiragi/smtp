@@ -5,7 +5,7 @@ import MailOutlined from '@material-ui/icons/MailOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import NewContact from './NewContact';
-import { contacts, saveObject, localName } from '../Component/Constant';
+import { contacts, saveObject, localName, emailReg } from '../Component/Constant';
 import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -61,9 +61,14 @@ export default function Address(props) {
       toggleMessageBox(`Please enter the name and the E-Mail.`, 'error');
       return;
     }
-    if (!/^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+    if (!emailReg.test(email)) {
       setEmailError(true);
       toggleMessageBox(`Unsupported E-Mail address.`, 'error');
+      return;
+    }
+    if (address.find((item) => item.email === email)) {
+      setEmailError(true);
+      toggleMessageBox(`Duplicate E-Mail address.`, 'error');
       return;
     }
 

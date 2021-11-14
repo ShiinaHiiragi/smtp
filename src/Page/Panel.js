@@ -235,8 +235,10 @@ export default function Panel(props) {
           /> : router === sideList.new.index
           ? <New
             config={config}
-            mail={{ toList, subject, text }}
-            setMail={{ setToList, setSubject, setText }}
+            address={address}
+            mail={{ toList, subject, text, buffer }}
+            setMail={{ setToList, setSubject, setText, setBuffer }}
+            toggleMessageBox={toggleMessageBox}
           /> : router === sideList.send.index
           ? <Send />
           : router === sideList.draft.index

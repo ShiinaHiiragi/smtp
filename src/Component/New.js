@@ -56,13 +56,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function New(props) {
   const classes = useStyles();
-  const { config, mail, setMail } = props;
-  const { toList, subject, text } = mail;
-  const { setToList, setSubject, setText } = setMail;
+  const { config, address, mail, setMail, toggleMessageBox } = props;
+  const { toList, subject, text, buffer } = mail;
+  const { setToList, setSubject, setText, setBuffer } = setMail;
   
   const [editSign, setEditSign] = React.useState(false);
   const [editContact, setEditContact] = React.useState(false);
   const [sign, setSign] = React.useState("");
+  const [toSend, setToSend] = React.useState("");
+  const [toSendError, setToSendError] = React.useState(false);
 
   React.useEffect(() => {
     let pair = `${config.email}_${localName.sign}`;
@@ -74,6 +76,12 @@ export default function New(props) {
     setSign(storage);
   // eslint-disable-next-line
   }, []);
+
+  const toggleEditContact = () => {
+    setToSend("");
+    setToSendError(false);
+    setEditContact(true);
+  }
 
   return (
     <div className={classes.root}>
@@ -95,6 +103,7 @@ export default function New(props) {
           className={classes.button}
           style={{ marginRight: 8 }}
           startIcon={<SaveOutlinedIcon />}
+          disabled={buffer > 0}
           // onClick={toggleNewContact}
         >
           Save Draft
@@ -115,7 +124,7 @@ export default function New(props) {
           <ChipsArray
             toList={toList}
             setToList={setToList}
-            toggleEditContact={() => setEditContact(true)}
+            toggleEditContact={toggleEditContact}
           />
         </div>
         <div style={{ height: "2%" }}/>
@@ -146,7 +155,11 @@ export default function New(props) {
         />
         <Contact
           open={editContact}
+          address={address}
+          email={{ toSend, toList, toSendError }}
+          setEmail={{ setToSend, setToList, setToSendError }}
           handleClose={() => setEditContact(false)}
+          toggleMessageBox={toggleMessageBox}
         />
       </Card>
     </div>

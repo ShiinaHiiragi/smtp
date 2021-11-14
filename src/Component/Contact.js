@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { localName } from "./Constant";
+import { emailReg } from './Constant';
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 const useStyles = makeStyles((theme) => ({
@@ -21,10 +21,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Contact(props) {
   const classes = useStyles();
-  const { open, handleClose } = props;
+  const { open, address, email, setEmail, handleClose, toggleMessageBox } = props;
+  const { toSend, toList, toSendError } = email;
+  const { setToSend, setToList, setToSendError } = setEmail;
 
-  const apply = React.useCallback(() => {
-  }, []);
+  const apply = () => {
+    setToSendError(!toSend.length);
+    if (!toSend.length) {
+      toggleMessageBox(`Please enter the E-Mail.`, 'error');
+      return;
+    }
+    if (!emailReg.test(toSend)) {
+      setToSendError(true);
+      toggleMessageBox(`Unsupported E-Mail address.`, 'error');
+      return;
+    }
+    if (toList.find((item) => item.email === toSend)) {
+      setToSendError(true);
+      toggleMessageBox(`Duplicate E-Mail address.`, 'error');
+      return;
+    }
+
+    const possibleName = address.find((item) => item.email === toSend)?.name;
+    setToList((toList) => [...toList, { name: possibleName ?? "", email: toSend }]);
+    handleClose();
+  }
 
   return (
     <Dialog
@@ -35,12 +56,18 @@ export default function Contact(props) {
     >
       <DialogTitle> Add Addressee </DialogTitle>
       <DialogContent>
-        {/* <DialogContentText>
-          The signature assigned will appear as your name before your E-Mail address.
+        <DialogContentText>
+          Enter the address you want to send E-Mail to and click 'APPLY' to continue.
         </DialogContentText>
         <div className={classes.text}>
-          123
-        </div> */}
+          <TextField
+            label={'E-Mail'}
+            style={{ width: '60%' }}
+            value={toSend}
+            error={toSendError}
+            onChange={(event) => setToSend(event.target.value)}
+          />
+        </div>
       </DialogContent>
       <DialogActions>
         <Button onClick={apply} color="secondary">

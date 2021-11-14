@@ -33,7 +33,7 @@ export default function ChipsArray(props) {
             <Chip
               className={classes.chip}
               variant="outlined"
-              label={data.name || data.email}
+              label={data.name.length ? `${data.name} <${data.email}>` : data.email}
               onDelete={handleDelete(index)}
             />
           </li>
