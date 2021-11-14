@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,12 +11,13 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import favicon from './favicon.png'
 
 const drawerWidth = 280;
 
@@ -76,7 +77,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Panel(props) {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [drawer, setDrawer] = React.useState(false);
   const [config, setConfig] = React.useState({ });
@@ -116,6 +116,13 @@ export default function Panel(props) {
         open={drawer}
         classes={{ paper: classes.drawerPaper }}
       >
+        <ListItem>
+          <ListItemAvatar>
+            <img src={favicon} width={32} height={32} />
+          </ListItemAvatar>
+          <ListItemText primary="SMTP Sender" secondary="Version 0.1.0" />
+        </ListItem>
+        <Divider />
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>
