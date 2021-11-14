@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     userSelect: 'none',
     display: 'flex',
+    height: '100%'
   },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
@@ -65,8 +66,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   content: {
+    display: 'flex',
+    maxHeight: '100%',
+    flexDirection: 'column',
     flexGrow: 1,
-    padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
