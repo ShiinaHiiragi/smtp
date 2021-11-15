@@ -1,11 +1,13 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import ChipsArray from './Chips';
-import { timeFormat } from './Constant';
+import { saveObject, timeFormat } from './Constant';
 
 const Accordion = withStyles({
   root: {
@@ -32,12 +34,13 @@ const AccordionSummary = withStyles({
     minHeight: 56,
     '&$expanded': {
       minHeight: 56,
-    },
+    }
   },
   content: {
     '&$expanded': {
       margin: '12px 0',
     },
+    alignItems: 'center'
   },
   expanded: {},
 })(MuiAccordionSummary);
@@ -49,12 +52,36 @@ const AccordionDetails = withStyles((theme) => ({
   },
 }))(MuiAccordionDetails);
 
+const useStyles = makeStyles((theme) => ({
+  info: {
+    display: 'flex'
+  },
+  buttons: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  button: {
+    display: 'flex',
+    maxHeight: 48
+  }
+}));
+
 export default function FlatAccordion(props) {
-  const { list } = props;
+  const classes = useStyles();
+  const { pair, list, setList } = props;
 
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (index) => (_, newExpanded) => {
     setExpanded(newExpanded ? index : false);
+  };
+
+  const deleteItem = (toDelete) => {
+    setList((list) => {
+      const newList = list.filter((_, index) => index !== toDelete);
+      saveObject(pair.email, pair.localName, newList);
+      return newList;
+    });
+    setExpanded(false);
   };
 
   return (
@@ -71,7 +98,22 @@ export default function FlatAccordion(props) {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <ChipsArray toList={item.to}/>
+            <div className={classes.info}>
+              <ChipsArray toList={item.to}/>
+              <div style={{ flexGrow: 1 }}/>
+              <div className={classes.buttons}>
+                <div className={classes.button}>
+                  <IconButton>
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
+                </div>
+                <div className={classes.button}>
+                  <IconButton onClick={() => deleteItem(index)}>
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
+                </div>
+              </div>
+            </div>
             <Typography> {item.message.content} </Typography>
           </AccordionDetails>
         </Accordion>

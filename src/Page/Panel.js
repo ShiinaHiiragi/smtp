@@ -249,11 +249,13 @@ export default function Panel(props) {
             toggleMessageBox={toggleMessageBox}
           /> : router === sideList.send.index
           ? <Send
+            pair={{ email: config.email, localName: localName.sended }}
             sended={sended}
             setSended={setSended}
           />
           : router === sideList.draft.index
           ? <Draft
+            pair={{ email: config.email, localName: localName.Draft }}
             draft={draft}
             setDraft={setDraft}
           />
