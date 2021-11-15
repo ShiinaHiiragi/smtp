@@ -9,7 +9,7 @@ import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import ChipsArray from './Chips';
 import Sign from './Sign';
 import Contact from './Contact';
-import { localName } from './Constant';
+import { localName, saveObject } from './Constant';
 // import { globalConfig } from './Sender';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -57,9 +57,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function New(props) {
   const classes = useStyles();
-  const { config, address, mail, setMail, toggleMessageBox } = props;
+  const { config, address, mail, setMail, memory, toggleMessageBox } = props;
   const { toList, subject, text, buffer } = mail;
   const { setToList, setSubject, setText, setBuffer } = setMail;
+  const { setSended, setDraft } = memory;
   
   const [editSign, setEditSign] = React.useState(false);
   const [editContact, setEditContact] = React.useState(false);
@@ -96,7 +97,15 @@ export default function New(props) {
       from: config.email,
       auth: config.auth
     };
-    toggleMessageBox(`The mail has been sent.`, 'success');
+    setSended((sended) => {
+      const newSended = [info, ...sended];
+      saveObject(config.email, localName.sended, newSended);
+      return newSended;
+    });
+    toggleMessageBox(`The mail has been sent successfully.`, 'success');
+    setToList([]);
+    setSubject("");
+    setText("");
   };
 
   return (

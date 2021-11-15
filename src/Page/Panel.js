@@ -245,6 +245,7 @@ export default function Panel(props) {
             address={address}
             mail={{ toList, subject, text, buffer }}
             setMail={{ setToList, setSubject, setText, setBuffer }}
+            memory={{ setSended, setDraft }}
             toggleMessageBox={toggleMessageBox}
           /> : router === sideList.send.index
           ? <Send

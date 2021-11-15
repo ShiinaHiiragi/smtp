@@ -34,19 +34,20 @@ export default function ChipsArray(props) {
               className={classes.chip}
               variant="outlined"
               label={data.name.length ? `${data.name} <${data.email}>` : data.email}
-              onDelete={handleDelete(index)}
+              onDelete={toggleEditContact && handleDelete(index)}
             />
           </li>
         );
       })}
-      <Chip
-        clickable
-        icon={<AddIcon />}
-        className={classes.chip}
-        variant="outlined"
-        label={"Add Addressee"}
-        onClick={toggleEditContact}
-      />
+      {toggleEditContact &&
+        <Chip
+          clickable
+          icon={<AddIcon />}
+          className={classes.chip}
+          variant="outlined"
+          label={"Add Addressee"}
+          onClick={toggleEditContact}
+        />}
     </div>
   );
 }

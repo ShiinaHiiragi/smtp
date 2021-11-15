@@ -4,6 +4,8 @@ import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
+import ChipsArray from './Chips';
+import { timeFormat } from './Constant';
 
 const Accordion = withStyles({
   root: {
@@ -43,6 +45,7 @@ const AccordionSummary = withStyles({
 const AccordionDetails = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
+    flexDirection: 'column'
   },
 }))(MuiAccordionDetails);
 
@@ -59,9 +62,16 @@ export default function FlatAccordion(props) {
       {list.map((item, index) => (
         <Accordion square expanded={expanded === index} onChange={handleChange(index)}>
           <AccordionSummary>
-            <Typography> {item.message.subject} </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              {timeFormat(new Date(item.time), 'yyyy MM/dd hh:mm:ss')}
+            </Typography>
+            {'　'}
+            <Typography variant="subtitle1">
+              {item.message.subject}
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
+            <ChipsArray toList={item.to}/>
             <Typography> {item.message.content} </Typography>
           </AccordionDetails>
         </Accordion>
