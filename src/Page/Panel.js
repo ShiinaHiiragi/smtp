@@ -267,8 +267,9 @@ export default function Panel(props) {
             pair={{ email: config.email, localName: localName.Draft }}
             draft={draft}
             setDraft={setDraft}
-            setBuffer={setBuffer}
-            clearMail={clearMail}
+            now={{ toList, subject, text, buffer }}
+            setNow={{ setToList, setSubject, setText, clearMail, setBuffer }}
+            setRouter={setRouter}
           />
           : null}
       </main>

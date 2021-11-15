@@ -128,7 +128,7 @@ export default function Address(props) {
           disabled={invalid}
           onClick={pass}
         >
-          Send Email
+          Send E-Mail
         </Button>
         <div style={{ flexGrow: 1 }}/>
         <Button

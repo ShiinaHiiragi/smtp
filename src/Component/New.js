@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import SendOutlinedIcon from '@material-ui/icons/SendOutlined';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
+import LayersClearOutlinedIcon from '@material-ui/icons/LayersClearOutlined';
 import ChipsArray from './Chips';
 import Sign from './Sign';
 import Contact from './Contact';
@@ -105,7 +106,11 @@ export default function New(props) {
     toggleMessageBox(`The mail has been sent successfully.`, 'success');
     setBuffer((buffer) => {
       if (buffer) {
-        setDraft((draft) => draft.filter((_, index) => index !== Math.abs(buffer) - 1));
+        setDraft((draft) => {
+          const newDraft = draft.filter((_, index) => index !== Math.abs(buffer) - 1);
+          saveObject(config.email, localName.draft, newDraft);
+          return newDraft;
+        });
       }
       return 0;
     });
@@ -155,13 +160,22 @@ export default function New(props) {
           variant="outlined"
           color="primary"
           className={classes.button}
-          style={{ marginRight: 8 }}
           startIcon={<CreateOutlinedIcon />}
           onClick={() => setEditSign(true)}
         >
           Signature
         </Button>
         <div style={{ flexGrow: 1 }}/>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.button}
+          style={{ marginRight: 8 }}
+          startIcon={<LayersClearOutlinedIcon />}
+          onClick={() => { clearMail(); setBuffer(0); }}
+        >
+          Clear
+        </Button>
         <Button
           variant="outlined"
           color="primary"
