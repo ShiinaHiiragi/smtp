@@ -229,9 +229,10 @@ export default function Panel(props) {
         {router === sideList.address.index
           ? <Address
             config={config}
-            toggleMessageBox={toggleMessageBox}
             address={address}
             setAddress={setAddress}
+            passing={{ toList, setToList, setRouter }}
+            toggleMessageBox={toggleMessageBox}
           /> : router === sideList.new.index
           ? <New
             config={config}

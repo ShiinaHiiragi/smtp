@@ -77,11 +77,15 @@ export default function New(props) {
   // eslint-disable-next-line
   }, []);
 
-  const toggleEditContact = () => {
+  const toggleEditContact = React.useCallback(() => {
     setToSend("");
     setToSendError(false);
     setEditContact(true);
-  }
+  }, []);
+
+  const send = () => {
+    toggleMessageBox(`The mail has been sent.`, 'success');
+  };
 
   return (
     <div className={classes.root}>
@@ -114,7 +118,7 @@ export default function New(props) {
           className={classes.button}
           startIcon={<SendOutlinedIcon />}
           disabled={!toList.length}
-          // onClick={toggleNewContact}
+          onClick={send}
         >
           Send E-Mail
         </Button>

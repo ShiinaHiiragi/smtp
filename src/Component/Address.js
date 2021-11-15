@@ -5,7 +5,7 @@ import MailOutlined from '@material-ui/icons/MailOutlined';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import NewContact from './NewContact';
-import { contacts, saveObject, localName, emailReg } from '../Component/Constant';
+import { contacts, saveObject, localName, emailReg, sideList } from '../Component/Constant';
 import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Address(props) {
   const classes = useStyles();
   const apiRef = useGridApiRef();
-  const { config, toggleMessageBox, address, setAddress } = props;
+  const { config, address, setAddress, passing, toggleMessageBox } = props;
+  const { toList, setToList, setRouter } = passing;
 
   const [newContact, setNewContact] = React.useState(false);
   const [invalid, setInvalid] = React.useState(true);
@@ -54,6 +55,7 @@ export default function Address(props) {
     setNewContact(true);
   }, []);
 
+  // TODO: Change Contact in draft and new
   const applyNew = () => {
     setNameError(!name.length);
     setEmailError(!email.length);
@@ -102,6 +104,16 @@ export default function Address(props) {
     });
   };
 
+  const pass = () => {
+    let toPass = [...apiRef.current.getSelectedRows().keys()];
+    let hasPass = toList.map((item) => item.email);
+    console.log(hasPass);
+    toPass = toPass.filter((item) => !hasPass.includes(address[item - 1].email))
+      .map((item) => ({ name: address[item - 1].name, email: address[item - 1].email }));
+    setToList((toList) => [...toList, ...toPass]);
+    setRouter(sideList.new.index);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.buttons}>
@@ -111,6 +123,7 @@ export default function Address(props) {
           className={classes.button}
           startIcon={<MailOutlined />}
           disabled={invalid}
+          onClick={pass}
         >
           Send Email
         </Button>
