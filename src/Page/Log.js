@@ -97,7 +97,7 @@ export default function Log() {
       toggleMessageBox(`Please enter the E-Mail and the Auth Code.`, 'error');
       return;
     }
-    const sender = new Sender({ }, { ...globalConfig, email: email, auth: auth });
+    const sender = new Sender({ }, { ...globalConfig, from: email, auth: auth });
     sender.connect(true, (err) => {
       if (err) {
         toggleMessageBox(`Auth Error: ${err}`, 'error');
