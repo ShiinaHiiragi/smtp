@@ -1,7 +1,9 @@
 import React from 'react';
+import clsx from 'clsx';
 import FlatAccordion from './Accordion';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -11,15 +13,22 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 3),
     display: 'flex',
     flexDirection: 'column'
+  },
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 }));
 
 export default function Address(props) {
   const classes = useStyles();
+  const { sended, setSended } = props;
 
   return (
-    <div className={classes.root}>
-      <FlatAccordion />
+    <div className={clsx(classes.root, !sended.length && classes.center)}>
+      {sended.length
+        ? <FlatAccordion list={sended}/>
+        : <Typography variant="button" color="textSecondary"> NO DATA </Typography>}
     </div>
   );
 }

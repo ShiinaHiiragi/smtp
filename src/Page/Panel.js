@@ -101,6 +101,8 @@ export default function Panel(props) {
   const [buffer, setBuffer] = React.useState(0);
 
   const [address, setAddress] = React.useState([]);
+  const [sended, setSended] = React.useState([]);
+  const [draft, setDraft] = React.useState([]);
 
   const [toList, setToList] = React.useState([]);
   const [subject, setSubject] = React.useState("");
@@ -110,6 +112,8 @@ export default function Panel(props) {
   React.useEffect(() => {
     setConfig({ email: props.email, auth: props.auth });
     setAddress(loadObject(props.email, localName.address));
+    setSended(loadObject(props.email, localName.sended));
+    setDraft(loadObject(props.email, localName.draft));
   // eslint-disable-next-line
   }, []);
 
@@ -208,6 +212,7 @@ export default function Panel(props) {
             </ListItemIcon>
             <ListItemText
               primary={sideList.send.name}
+              secondary={`${sended.length} Sended`}
             />
           </ListItem>
           <ListItem
@@ -220,6 +225,7 @@ export default function Panel(props) {
             </ListItemIcon>
             <ListItemText
               primary={sideList.draft.name}
+              secondary={`${draft.length} Saved`}
             />
           </ListItem>
         </List>
@@ -241,9 +247,15 @@ export default function Panel(props) {
             setMail={{ setToList, setSubject, setText, setBuffer }}
             toggleMessageBox={toggleMessageBox}
           /> : router === sideList.send.index
-          ? <Send />
+          ? <Send
+            sended={sended}
+            setSended={setSended}
+          />
           : router === sideList.draft.index
-          ? <Draft />
+          ? <Draft
+            draft={draft}
+            setDraft={setDraft}
+          />
           : null}
       </main>
       <MessageBox

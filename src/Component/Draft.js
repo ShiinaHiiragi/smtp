@@ -1,7 +1,9 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
+import clsx from 'clsx';
+import FlatAccordion from './Accordion';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -12,20 +14,21 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column'
   },
-  card: {
-    width: '100%',
-    flexGrow: 1,
-    borderRadius: 0
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 }));
 
 export default function Address(props) {
   const classes = useStyles();
+  const { draft, setDraft } = props;
 
   return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
-      </Card>
+    <div className={clsx(classes.root, !draft.length && classes.center)}>
+      {draft.length
+        ? <FlatAccordion list={draft}/>
+        : <Typography variant="button" color="textSecondary"> NO DATA </Typography>}
     </div>
   );
 }

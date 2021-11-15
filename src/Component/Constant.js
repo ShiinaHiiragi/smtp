@@ -1,7 +1,9 @@
 const localName = {
   email: "email",
   address: "address",
-  sign: "sign"
+  sign: "sign",
+  sended: "sended",
+  draft: "draft"
 }
 
 const sideList = {
