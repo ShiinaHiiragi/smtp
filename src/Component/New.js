@@ -10,6 +10,7 @@ import ChipsArray from './Chips';
 import Sign from './Sign';
 import Contact from './Contact';
 import { localName } from './Constant';
+// import { globalConfig } from './Sender';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +85,17 @@ export default function New(props) {
   }, []);
 
   const send = () => {
+    const info = {
+      to: toList,
+      time: new Date().toISOString(),
+      message: { subject: subject, content: text }
+    };
+    const configs = {
+      // ...globalConfig,
+      sign: sign,
+      from: config.email,
+      auth: config.auth
+    };
     toggleMessageBox(`The mail has been sent.`, 'success');
   };
 

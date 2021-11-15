@@ -108,7 +108,7 @@ export default function Panel(props) {
 
   // initilize from local storage
   React.useEffect(() => {
-    setConfig({ email: props.email, auth: props.email });
+    setConfig({ email: props.email, auth: props.auth });
     setAddress(loadObject(props.email, localName.address));
   // eslint-disable-next-line
   }, []);

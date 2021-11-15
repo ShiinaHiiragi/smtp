@@ -1,3 +1,5 @@
+import React from 'react';
+import Card from '@material-ui/core/Card';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -6,16 +8,24 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     flexGrow: 1,
     overflowY: 'scroll',
-    padding: theme.spacing(2, 3)
+    padding: theme.spacing(2, 3),
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  card: {
+    width: '100%',
+    flexGrow: 1,
+    borderRadius: 0
   }
 }));
 
-export default function Draft() {
+export default function Address(props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      4
+      <Card className={classes.card}>
+      </Card>
     </div>
   );
 }

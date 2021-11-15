@@ -1,3 +1,5 @@
+import React from 'react';
+import FlatAccordion from './Accordion';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -6,16 +8,18 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     flexGrow: 1,
     overflowY: 'scroll',
-    padding: theme.spacing(2, 3)
+    padding: theme.spacing(2, 3),
+    display: 'flex',
+    flexDirection: 'column'
   }
 }));
 
-export default function Send() {
+export default function Address(props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      3
+      <FlatAccordion />
     </div>
   );
 }
