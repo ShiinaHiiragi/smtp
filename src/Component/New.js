@@ -59,7 +59,7 @@ export default function New(props) {
   const classes = useStyles();
   const { config, address, mail, setMail, memory, toggleMessageBox } = props;
   const { toList, subject, text, buffer } = mail;
-  const { setToList, setSubject, setText, setBuffer } = setMail;
+  const { setToList, setSubject, setText, setBuffer, clearMail } = setMail;
   const { setSended, setDraft } = memory;
   
   const [editSign, setEditSign] = React.useState(false);
@@ -103,9 +103,13 @@ export default function New(props) {
       return newSended;
     });
     toggleMessageBox(`The mail has been sent successfully.`, 'success');
-    setToList([]);
-    setSubject("");
-    setText("");
+    setBuffer((buffer) => {
+      if (buffer) {
+        setDraft((draft) => draft.filter((_, index) => index !== Math.abs(buffer) - 1));
+      }
+      return 0;
+    });
+    clearMail();
   };
 
   const save = () => {

@@ -6,6 +6,7 @@ import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import ChipsArray from './Chips';
 import { saveObject, timeFormat } from './Constant';
 
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FlatAccordion(props) {
   const classes = useStyles();
-  const { pair, list, setList, toggleEdit } = props;
+  const { pair, list, setList, setBuffer, clearMail, toggleEdit } = props;
 
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (index) => (_, newExpanded) => {
@@ -80,6 +81,13 @@ export default function FlatAccordion(props) {
       const newList = list.filter((_, index) => index !== toDelete);
       saveObject(pair.email, pair.localName, newList);
       return newList;
+    });
+    setBuffer?.((buffer) => {
+      if (toggleEdit && Math.abs(buffer) - 1 === toDelete) {
+        clearMail();
+        return 0;
+      }
+      return buffer;
     });
     setExpanded(false);
   };
@@ -103,8 +111,8 @@ export default function FlatAccordion(props) {
               <div style={{ flexGrow: 1 }}/>
               <div className={classes.buttons}>
                 {toggleEdit && <div className={classes.button}>
-                  <IconButton onClick={() => toggleEdit(index)}>
-                    <DeleteOutlineOutlinedIcon />
+                  <IconButton onClick={() => toggleEdit(item, index)}>
+                    <CreateOutlinedIcon />
                   </IconButton>
                 </div>}
                 <div className={classes.button}>

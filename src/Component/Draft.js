@@ -22,13 +22,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Address(props) {
   const classes = useStyles();
-  const { pair, draft, setDraft } = props;
+  const { pair, draft, setDraft, setBuffer, clearMail } = props;
 
   return (
     <div className={clsx(classes.root, !draft.length && classes.center)}>
       {draft.length
-        ? <FlatAccordion pair={pair} list={draft} setList={setDraft}/>
-        : <Typography variant="button" color="textSecondary"> NO DATA </Typography>}
+        ? <FlatAccordion
+          pair={pair}
+          list={draft}
+          setList={setDraft}
+          setBuffer={setBuffer}
+          clearMail={clearMail}
+          toggleEdit={() => {}}
+        /> : <Typography variant="button" color="textSecondary"> NO DATA </Typography>}
     </div>
   );
 }

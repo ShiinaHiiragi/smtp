@@ -108,6 +108,13 @@ export default function Panel(props) {
   const [subject, setSubject] = React.useState("");
   const [text, setText] = React.useState("");
 
+  // clear current mail panel
+  const clearMail = React.useCallback(() => {
+    setToList([]);
+    setSubject("");
+    setText("");
+  }, []);
+
   // initilize from local storage
   React.useEffect(() => {
     setConfig({ email: props.email, auth: props.auth });
@@ -199,7 +206,9 @@ export default function Panel(props) {
             </ListItemIcon>
             <ListItemText
               primary={sideList.new.name}
-              secondary={`${buffer > 0 ? 'Saved' : 'No Save'}`}
+              secondary={
+                `${buffer ? (`${buffer > 0 ? 'Saved' : 'No Save'} (Draft ${Math.abs(buffer)})`) : `Not in Draft`}`
+              }
             />
           </ListItem>
           <ListItem
@@ -244,7 +253,7 @@ export default function Panel(props) {
             config={config}
             address={address}
             mail={{ toList, subject, text, buffer }}
-            setMail={{ setToList, setSubject, setText, setBuffer }}
+            setMail={{ setToList, setSubject, setText, setBuffer, clearMail }}
             memory={{ setSended, setDraft }}
             toggleMessageBox={toggleMessageBox}
           /> : router === sideList.send.index
@@ -258,6 +267,8 @@ export default function Panel(props) {
             pair={{ email: config.email, localName: localName.Draft }}
             draft={draft}
             setDraft={setDraft}
+            setBuffer={setBuffer}
+            clearMail={clearMail}
           />
           : null}
       </main>
