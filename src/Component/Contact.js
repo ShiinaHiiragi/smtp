@@ -23,7 +23,7 @@ export default function Contact(props) {
   const classes = useStyles();
   const { open, address, email, setEmail, handleClose, toggleMessageBox } = props;
   const { toSend, toList, toSendError } = email;
-  const { setToSend, setToList, setToSendError } = setEmail;
+  const { setToSend, setToList, setToSendError, setBuffer } = setEmail;
 
   const apply = () => {
     setToSendError(!toSend.length);
@@ -44,6 +44,7 @@ export default function Contact(props) {
 
     const possibleName = address.find((item) => item.email === toSend)?.name;
     setToList((toList) => [...toList, { name: possibleName ?? "", email: toSend }]);
+    setBuffer((buffer) => -Math.abs(buffer));
     handleClose();
   }
 

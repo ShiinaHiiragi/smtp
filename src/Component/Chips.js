@@ -19,10 +19,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ChipsArray(props) {
   const classes = useStyles();
-  const { toList, setToList, toggleEditContact } = props;
+  const { toList, setToList, setBuffer, toggleEditContact } = props;
 
   const handleDelete = (chipToDelete) => () => {
     setToList((toList) => toList.filter((_, index) => index !== chipToDelete));
+    setBuffer((buffer) => -Math.abs(buffer));
   };
 
   return (

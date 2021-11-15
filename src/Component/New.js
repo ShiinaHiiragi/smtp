@@ -91,12 +91,12 @@ export default function New(props) {
       time: new Date().toISOString(),
       message: { subject: subject, content: text }
     };
-    const configs = {
-      // ...globalConfig,
-      sign: sign,
-      from: config.email,
-      auth: config.auth
-    };
+    // const configs = {
+    //   ...globalConfig,
+    //   sign: sign,
+    //   from: config.email,
+    //   auth: config.auth
+    // };
     setSended((sended) => {
       const newSended = [info, ...sended];
       saveObject(config.email, localName.sended, newSended);
@@ -107,6 +107,42 @@ export default function New(props) {
     setSubject("");
     setText("");
   };
+
+  const save = () => {
+    const info = {
+      to: toList,
+      time: new Date().toISOString(),
+      message: { subject: subject, content: text }
+    };
+    if (buffer < 0) {
+      setBuffer((buffer) => {
+        const newBuffer = -buffer, newIndex = -buffer - 1;
+        setDraft((draft) => {
+          const newDraft = draft.map((item, index) => index === newIndex ? info : item);
+          saveObject(config.email, localName.draft, newDraft);
+          return newDraft;
+        });
+        return newBuffer;
+      });
+    } else {
+      setDraft((draft) => {
+        const newDraft = [info, ...draft];
+        saveObject(config.email, localName.draft, newDraft);
+        return newDraft;
+      });
+      setBuffer(1);
+    }
+  }
+
+  const subjectChange = React.useCallback((event) => {
+    setSubject(event.target.value);
+    setBuffer((buffer) => -Math.abs(buffer));
+  }, [setBuffer, setSubject]);
+
+  const textChange = React.useCallback((event) => {
+    setText(event.target.value);
+    setBuffer((buffer) => -Math.abs(buffer));
+  }, [setBuffer, setText]);
 
   return (
     <div className={classes.root}>
@@ -129,7 +165,7 @@ export default function New(props) {
           style={{ marginRight: 8 }}
           startIcon={<SaveOutlinedIcon />}
           disabled={buffer > 0}
-          // onClick={toggleNewContact}
+          onClick={save}
         >
           Save Draft
         </Button>
@@ -149,6 +185,7 @@ export default function New(props) {
           <ChipsArray
             toList={toList}
             setToList={setToList}
+            setBuffer={setBuffer}
             toggleEditContact={toggleEditContact}
           />
         </div>
@@ -158,7 +195,7 @@ export default function New(props) {
         <TextField
           fullWidth
           value={subject}
-          onChange={(event) => setSubject(event.target.value)}
+          onChange={subjectChange}
           label="Subject"
         />
         <div style={{ height: "2%" }}/>
@@ -167,7 +204,7 @@ export default function New(props) {
             fullWidth
             multiline
             value={text}
-            onChange={(event) => setText(event.target.value)}
+            onChange={textChange}
             label="Text"
           />
         </div>
@@ -182,7 +219,7 @@ export default function New(props) {
           open={editContact}
           address={address}
           email={{ toSend, toList, toSendError }}
-          setEmail={{ setToSend, setToList, setToSendError }}
+          setEmail={{ setToSend, setToList, setToSendError, setBuffer }}
           handleClose={() => setEditContact(false)}
           toggleMessageBox={toggleMessageBox}
         />

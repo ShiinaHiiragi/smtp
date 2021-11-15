@@ -37,7 +37,7 @@ export default function Address(props) {
   const classes = useStyles();
   const apiRef = useGridApiRef();
   const { config, address, setAddress, passing, toggleMessageBox } = props;
-  const { toList, setToList, setRouter } = passing;
+  const { toList, setToList, setRouter, setBuffer } = passing;
 
   const [newContact, setNewContact] = React.useState(false);
   const [invalid, setInvalid] = React.useState(true);
@@ -112,6 +112,9 @@ export default function Address(props) {
       .map((item) => ({ name: address[item - 1].name, email: address[item - 1].email }));
     setToList((toList) => [...toList, ...toPass]);
     setRouter(sideList.new.index);
+    if (toPass.length) {
+      setBuffer((buffer) => -Math.abs(buffer));
+    }
   };
 
   return (

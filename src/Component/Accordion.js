@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FlatAccordion(props) {
   const classes = useStyles();
-  const { pair, list, setList } = props;
+  const { pair, list, setList, toggleEdit } = props;
 
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (index) => (_, newExpanded) => {
@@ -102,11 +102,11 @@ export default function FlatAccordion(props) {
               <ChipsArray toList={item.to}/>
               <div style={{ flexGrow: 1 }}/>
               <div className={classes.buttons}>
-                <div className={classes.button}>
-                  <IconButton>
+                {toggleEdit && <div className={classes.button}>
+                  <IconButton onClick={() => toggleEdit(index)}>
                     <DeleteOutlineOutlinedIcon />
                   </IconButton>
-                </div>
+                </div>}
                 <div className={classes.button}>
                   <IconButton onClick={() => deleteItem(index)}>
                     <DeleteOutlineOutlinedIcon />
