@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Address(props) {
+export default function Draft(props) {
   const classes = useStyles();
   const { pair, now, setNow, draft, setDraft, setRouter } = props;
   const { toList, subject, text, buffer } = now;

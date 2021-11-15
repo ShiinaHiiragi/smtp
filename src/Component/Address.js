@@ -37,7 +37,7 @@ export default function Address(props) {
   const classes = useStyles();
   const apiRef = useGridApiRef();
   const { config, address, setAddress, passing, toggleMessageBox } = props;
-  const { toList, setToList, setRouter, setBuffer } = passing;
+  const { toList, setToList, setRouter, setBuffer, setDraft } = passing;
 
   const [newContact, setNewContact] = React.useState(false);
   const [invalid, setInvalid] = React.useState(true);
@@ -55,7 +55,6 @@ export default function Address(props) {
     setNewContact(true);
   }, []);
 
-  // TODO: Change Contact in draft and new
   const applyNew = () => {
     setNameError(!name.length);
     setEmailError(!email.length);
@@ -73,6 +72,18 @@ export default function Address(props) {
       toggleMessageBox(`Duplicate E-Mail address.`, 'error');
       return;
     }
+
+    setToList((toList) => toList.map((item) => item.email === email
+      ? { ...item, name: name }
+      : item
+    ));
+    setDraft((draft) => draft.map((item) => ({
+      ...item,
+      to: item.to.map((subItem) => subItem.email === email
+        ? { ...subItem, name: name }
+        : subItem
+      )
+    })));
 
     setAddress((address) => {
       const newAddress = [

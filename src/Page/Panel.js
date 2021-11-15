@@ -179,7 +179,7 @@ export default function Panel(props) {
           <ListItemAvatar>
             <img src={favicon} alt="" width={32} height={32} />
           </ListItemAvatar>
-          <ListItemText primary="SMTP Sender" secondary="Version 0.1.0" />
+          <ListItemText primary="SMTP Sender" secondary="Version 1.0.0" />
         </ListItem>
         <Divider />
         <List>
@@ -246,7 +246,7 @@ export default function Panel(props) {
             config={config}
             address={address}
             setAddress={setAddress}
-            passing={{ toList, setToList, setRouter, setBuffer }}
+            passing={{ toList, setToList, setRouter, setBuffer, setDraft }}
             toggleMessageBox={toggleMessageBox}
           /> : router === sideList.new.index
           ? <New
@@ -264,7 +264,7 @@ export default function Panel(props) {
           />
           : router === sideList.draft.index
           ? <Draft
-            pair={{ email: config.email, localName: localName.Draft }}
+            pair={{ email: config.email, localName: localName.draft }}
             draft={draft}
             setDraft={setDraft}
             now={{ toList, subject, text, buffer }}

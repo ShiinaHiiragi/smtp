@@ -113,7 +113,7 @@ Sender.prototype.Action = {
   [Sender.prototype.Step.to]: (sender) => {
     sender.info.counter += 1;
     sender.write(
-      `RCPT TO: <${sender.info.to[sender.info.counter - 1]}>`,
+      `RCPT TO: <${sender.info.to[sender.info.counter - 1].email}>`,
       sender.info.counter === sender.info.to.length
     );
   },

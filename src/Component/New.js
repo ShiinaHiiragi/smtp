@@ -11,7 +11,7 @@ import ChipsArray from './Chips';
 import Sign from './Sign';
 import Contact from './Contact';
 import { localName, saveObject } from './Constant';
-// import { globalConfig } from './Sender';
+import { globalConfig, Sender } from './Sender';
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -92,29 +92,36 @@ export default function New(props) {
       time: new Date().toISOString(),
       message: { subject: subject, content: text }
     };
-    // const configs = {
-    //   ...globalConfig,
-    //   sign: sign,
-    //   from: config.email,
-    //   auth: config.auth
-    // };
-    setSended((sended) => {
-      const newSended = [info, ...sended];
-      saveObject(config.email, localName.sended, newSended);
-      return newSended;
-    });
-    toggleMessageBox(`The mail has been sent successfully.`, 'success');
-    setBuffer((buffer) => {
-      if (buffer) {
-        setDraft((draft) => {
-          const newDraft = draft.filter((_, index) => index !== Math.abs(buffer) - 1);
-          saveObject(config.email, localName.draft, newDraft);
-          return newDraft;
-        });
+    const configs = {
+      ...globalConfig,
+      sign: sign,
+      from: config.email,
+      auth: config.auth
+    };
+    const sender = new Sender(info, configs);
+    sender.connect(false, (err) => {
+      if (err) {
+        toggleMessageBox(`Server Error: ${err}`, 'error');
+        return;
       }
-      return 0;
+      setSended((sended) => {
+        const newSended = [info, ...sended];
+        saveObject(config.email, localName.sended, newSended);
+        return newSended;
+      });
+      toggleMessageBox(`The mail has been sent successfully.`, 'success');
+      setBuffer((buffer) => {
+        if (buffer) {
+          setDraft((draft) => {
+            const newDraft = draft.filter((_, index) => index !== Math.abs(buffer) - 1);
+            saveObject(config.email, localName.draft, newDraft);
+            return newDraft;
+          });
+        }
+        return 0;
+      });
+      clearMail();
     });
-    clearMail();
   };
 
   const save = () => {
