@@ -137,33 +137,3 @@ Sender.prototype.Action = {
 };
 
 export { globalConfig, Sender }
-
-// const sender = new Sender({
-//   to: [
-//     {
-//       name: "me",
-//       email: "shiinahiiragi@163.com"
-//     },
-//     {
-//       name: "stillMe",
-//       email: "shiinahiiragi@outlook.com",
-//     }
-//   ],
-//   message: {
-//     subject: "TLS TEST",
-//     content: "Test for tls.\r\n.\r\nA single dot here.\r\n"
-//   }
-// }, {
-//   ...globalConfig,
-//   sign: "Ichinoe",
-//   from: "2191558076@qq.com",
-//   auth: "fqxktlgdgbaddjcd"
-// });
-
-// sender.connect(true, (err) => {
-//   if (err) {
-//     console.log("ERR!");
-//   } else {
-//     console.log("SUCCESS!");
-//   }
-// });

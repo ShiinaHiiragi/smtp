@@ -95,7 +95,12 @@ export default function FlatAccordion(props) {
   return (
     <div>
       {list.map((item, index) => (
-        <Accordion square expanded={expanded === index} onChange={handleChange(index)}>
+        <Accordion
+          square
+          expanded={expanded === index}
+          onChange={handleChange(index)}
+          key={index}
+        >
           <AccordionSummary>
             <Typography variant="subtitle1" color="textSecondary">
               {timeFormat(new Date(item.time), 'yyyy MM/dd hh:mm:ss')}
