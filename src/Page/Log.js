@@ -17,6 +17,7 @@ import MessageBox from "../Component/MessageBox";
 import { globalConfig, Sender } from '../Component/Sender';
 import { localName } from '../Component/Constant';
 import Panel from './Panel';
+import Load from "../Component/Load";
 
 import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
@@ -90,15 +91,30 @@ export default function Log() {
     }));
   }, []);
 
+  const [loading, setLoading] = React.useState(false);
   const verify = React.useCallback(() => {
+    // the state of loading scene
+    let clockLoading = null;
+    const toggleLoading = () =>
+      (clockLoading = setTimeout(() => {
+        clockLoading = null;
+        setLoading(true);
+      }, 1000));
+    const closeLoading = () => {
+      if (clockLoading) clearTimeout(clockLoading);
+      setLoading(false);
+    };
+
     setEmailError(!email.length);
     setAuthError(!auth.length);
     if (!email.length || !auth.length) {
       toggleMessageBox(`Please enter the E-Mail and the Auth Code.`, 'error');
       return;
     }
+    toggleLoading();
     const sender = new Sender({ }, { ...globalConfig, from: email, auth: auth });
     sender.connect(true, (err) => {
+      closeLoading();
       if (err) {
         toggleMessageBox(`Auth Error: ${err}`, 'error');
       } else {
@@ -182,6 +198,7 @@ export default function Log() {
         messageBoxType={messageBoxInfo.type}
         messageBoxMessage={messageBoxInfo.message}
       />
+      <Load open={loading} />
     </Container>
   );
 }

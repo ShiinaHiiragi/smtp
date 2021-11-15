@@ -58,10 +58,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function New(props) {
   const classes = useStyles();
-  const { config, address, mail, setMail, memory, toggleMessageBox } = props;
+  const { config, address, mail, setMail, memory, toggleMessageBox, loading } = props;
   const { toList, subject, text, buffer } = mail;
   const { setToList, setSubject, setText, setBuffer, clearMail } = setMail;
   const { setSended, setDraft } = memory;
+  const { toggleLoading, closeLoading } = loading;
   
   const [editSign, setEditSign] = React.useState(false);
   const [editContact, setEditContact] = React.useState(false);
@@ -98,8 +99,10 @@ export default function New(props) {
       from: config.email,
       auth: config.auth
     };
+    toggleLoading();
     const sender = new Sender(info, configs);
     sender.connect(false, (err) => {
+      closeLoading();
       if (err) {
         toggleMessageBox(`Server Error: ${err}`, 'error');
         return;

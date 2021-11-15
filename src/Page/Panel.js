@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +16,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -25,6 +27,8 @@ import Address from '../Component/Address';
 import New from '../Component/New';
 import Send from '../Component/Send';
 import Draft from '../Component/Draft';
+import Load from "../Component/Load";
+import Log from './Log';
 
 import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 300;
@@ -108,6 +112,19 @@ export default function Panel(props) {
   const [subject, setSubject] = React.useState("");
   const [text, setText] = React.useState("");
 
+  // the state of loading scene
+  let clockLoading = null;
+  const [loading, setLoading] = React.useState(false);
+  const toggleLoading = () =>
+    (clockLoading = setTimeout(() => {
+      clockLoading = null;
+      setLoading(true);
+    }, 1000));
+  const closeLoading = () => {
+    if (clockLoading) clearTimeout(clockLoading);
+    setLoading(false);
+  };
+
   // clear current mail panel
   const clearMail = React.useCallback(() => {
     setToList([]);
@@ -143,6 +160,11 @@ export default function Panel(props) {
       open: false
     }));
   }, []);
+
+  const exitApp = React.useCallback(() => {
+    clearMail();
+    ReactDOM.render(<Log />, document.getElementById("root"));
+  }, [clearMail]);
 
   return (
     <div className={classes.root}>
@@ -237,6 +259,18 @@ export default function Panel(props) {
               secondary={`${draft.length} Saved`}
             />
           </ListItem>
+          <ListItem
+            button
+            onClick={exitApp}
+          >
+            <ListItemIcon style={{ paddingLeft: 4 }}>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary='Exit'
+              secondary='See You Next Time'
+            />
+          </ListItem>
         </List>
       </Drawer>
       <main className={clsx(classes.content, { [classes.contentShift]: drawer })}>
@@ -256,6 +290,7 @@ export default function Panel(props) {
             setMail={{ setToList, setSubject, setText, setBuffer, clearMail }}
             memory={{ setSended, setDraft }}
             toggleMessageBox={toggleMessageBox}
+            loading={{ toggleLoading, closeLoading }}
           /> : router === sideList.send.index
           ? <Send
             pair={{ email: config.email, localName: localName.sended }}
@@ -279,6 +314,7 @@ export default function Panel(props) {
         messageBoxType={messageBoxInfo.type}
         messageBoxMessage={messageBoxInfo.message}
       />
+      <Load open={loading} />
     </div>
   );
 }
